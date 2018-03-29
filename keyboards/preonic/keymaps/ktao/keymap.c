@@ -17,12 +17,15 @@
 #include "preonic.h"
 #include "action_layer.h"
 
+// The regular TO() wasn't working from within a layer because the release sent us back to layer 0
+#define TOR(layer) (layer | QK_TO | (ON_RELEASE << 0x4))
+
 enum preonic_layers {
   _QWERTY,
   _SYMBOLS,
   _NAV,
   _NUMPAD,
-  _LAYER,
+  _LOCK,
   _LOWER,
   _RAISE,
   _ADJUST
@@ -33,7 +36,7 @@ enum preonic_keycodes {
   SYMBOLS,
   NAV,
   NUMPAD,
-  LAYER,
+  LOCK,
   LOWER,
   RAISE,
   BACKLIT
@@ -57,9 +60,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = {
   {KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC},
   {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_DEL},
-  {/*LT(4,KC_CAPS)*/TO(1),LT(1,KC_A),KC_S,LT(3,KC_D),LT(2,KC_F),KC_G,KC_H, KC_J,    KC_K,    KC_L,LT(1,KC_SCOLON),KC_ENT},
+  {KC_CAPS,LT(1,KC_A),KC_S,LT(3,KC_D),LT(2,KC_F),KC_G,   KC_H,    KC_J,    KC_K,    KC_L,LT(1,KC_SCOLON),KC_ENT},
   {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT},
-  {KC_LCTL, KC_LGUI, KC_LALT, KC_LALT, LOWER,LT(2,KC_SPC),LT(2,KC_SPC),RAISE,KC_LEFT,KC_DOWN,KC_UP,   KC_RGHT}
+  {KC_LCTL, KC_LGUI, TG(4),   KC_LALT, LOWER,LT(2,KC_SPC),LT(2,KC_SPC),RAISE,KC_LEFT,KC_DOWN,KC_UP,   RCTL_T(KC_RIGHT)}
 },
 
 /* Symbols (1)
@@ -76,11 +79,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_SYMBOLS] = {
-  {TO(0),   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_TRNS},
-  {KC_TRNS, KC_F11,  KC_F12,  KC_LCBR, KC_RCBR, KC_EXLM, KC_PLUS, KC_DQT,  KC_QUOT, KC_GRV,  KC_TILD, KC_INS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_LPRN, KC_RPRN, KC_AMPR, KC_EXLM, KC_EQL,  KC_MINS, KC_GT,   KC_TRNS, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_LT,   KC_GT,   KC_PIPE, KC_AT,   KC_SLSH, KC_ASTR, KC_BSLS, KC_UNDS, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_LBRC, KC_RBRC, KC_TRNS, KC_TRNS, KC_TRNS, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
+  {TO(0),   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  _______},
+  {_______, KC_F11,  KC_F12,  KC_LCBR, KC_RCBR, KC_EXLM, KC_PLUS, KC_DQT,  KC_QUOT, KC_GRV,  KC_TILD, KC_INS},
+  {_______, _______, _______, KC_LPRN, KC_RPRN, KC_AMPR, KC_EXLM, KC_EQL,  KC_MINS, KC_GT,   _______, _______},
+  {_______, _______, _______, KC_LT,   KC_GT,   KC_PIPE, KC_AT,   KC_SLSH, KC_ASTR, KC_BSLS, KC_UNDS, _______},
+  {_______, _______, _______, KC_LBRC, KC_RBRC, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
 },
 
 /* Nav (2)
@@ -97,11 +100,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_NAV] = {
-  {TO(0),   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_TRNS, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_TRNS, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
+  {TO(0),   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, _______, _______, _______, _______, KC_PGUP, KC_HOME, KC_UP,   KC_END,  _______, _______},
+  {_______, _______, _______, _______, _______, _______, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______}
 },
 
 /* Numpad (3)
@@ -118,11 +121,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_NUMPAD] = {
-  {TO(0),   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_NLCK, KC_ESC,  KC_PSLS, KC_PAST, KC_PMNS, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_P7,   KC_P8,   KC_P9,S(KC_PPLS), KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_P1,   KC_P2,   KC_P3,   KC_PENT, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_P0,   KC_P0,   KC_PDOT, KC_PENT, KC_TRNS}
+  {TO(0),   _______, _______, _______, _______, _______, KC_NLCK, KC_ESC,  KC_PSLS, KC_PAST, KC_PMNS, _______},
+  {_______, _______, _______, _______, _______, _______, _______, KC_P7,   KC_P8,   KC_P9,S(KC_PPLS), _______},
+  {_______, _______, _______, _______, _______, _______, _______, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, _______},
+  {_______, _______, _______, _______, _______, _______, _______, KC_P1,   KC_P2,   KC_P3,   KC_PENT, _______},
+  {_______, _______, _______, _______, _______, _______, _______, KC_P0,   KC_P0,   KC_PDOT, KC_PENT, _______}
 },
 
 /* Layer Lock (4)
@@ -138,12 +141,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |    TO(2)    |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_LAYER] = {
-  {TO(0),   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
-  {KC_TRNS, TO(1),   KC_TRNS, TO(3),   TO(2),   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, TO(1),   KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS},
-  {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, TO(2),   TO(2),   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
+[_LOCK] = {
+  {TO(0),   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, TOR(1),  _______, TOR(3),  TOR(2),  _______, _______, _______, _______, _______, TOR(1),  _______},
+  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
+  {_______, _______, _______, _______, _______, TOR(2),  TOR(2),  _______, _______, _______, _______, _______}
 },
 
 /* Lower
