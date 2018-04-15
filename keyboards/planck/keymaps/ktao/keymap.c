@@ -76,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * | TO(0)|      |      |   (  |   )  |  &   |   !  |   =  |   -  |   >  |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |      |      |   <  |   >  |  |   |  @   |   /  |   *  |   \  |   _  |      |
+ * | Caps |      |      |   <  |   >  |  |   |  @   |   /  |   *  |   \  |   _  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |   [  |   ]  |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
@@ -84,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_SYMBOLS] = {
   {_______, KC_F11,  KC_F12,  KC_LCBR, KC_RCBR, KC_EXLM, KC_PLUS, KC_DQT,  KC_QUOT, KC_GRV,  KC_TILD, KC_DEL},
   {TO(0),   _______, _______, KC_LPRN, KC_RPRN, KC_AMPR, KC_EXLM, KC_EQL,  KC_MINS, KC_GT,   _______, _______},
-  {_______, _______, _______, KC_LT,   KC_GT,   KC_PIPE, KC_AT,   KC_SLSH, KC_ASTR, KC_BSLS, KC_UNDS, _______},
+  {KC_CAPS, _______, _______, KC_LT,   KC_GT,   KC_PIPE, KC_AT,   KC_SLSH, KC_ASTR, KC_BSLS, KC_UNDS, _______},
   {_______, _______, _______, KC_LBRC, KC_RBRC, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY}
 },
 
