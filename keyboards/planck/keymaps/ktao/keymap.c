@@ -24,13 +24,13 @@ extern keymap_config_t keymap_config;
 
 enum planck_layers {
   _QWERTY,		// 0
-  _SYMBOLS,		// 1
+  _SYM,			// 1
   _NAV,			// 2
-  _NUMPAD,		// 3
+  _NUM,			// 3
   _LOCK,		// 4
-  _CONSTANTS,	// 5
+  _CONST,		// 5
   _MOUSE,		// 6
-  _FUNKEYS,		// 7
+  _FN,			// 7
   _LOWER,
   _RAISE,
   _ADJUST
@@ -38,13 +38,13 @@ enum planck_layers {
 
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
-  SYMBOLS,
+  SYM,
   NAV,
-  NUMPAD,
+  NUM,
   LOCK,
-  CONSTANTS,
+  CONST,
   MOUSE,
-  FUNKEYS,
+  FN,
   LOWER,
   RAISE,
   BACKLIT
@@ -64,10 +64,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = {
-  {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
-  {KC_ESC,  LT(1,KC_A),KC_S,  LT(3,KC_D),KC_F,  KC_G,   KC_H,     KC_J,    KC_K,    KC_L,LT(1,KC_SCOLON),KC_ENT},
-  {KC_LSFT, LT(7,KC_Z),KC_X,  KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT},
-  {KC_LCTL, KC_LGUI, TG(4),   KC_LALT, LOWER,LT(2,KC_SPC),LT(2,KC_SPC),RAISE,KC_LEFT,KC_DOWN,KC_UP,   RCTL_T(KC_RIGHT)}
+  {KC_TAB,	KC_Q,			KC_W,		KC_E,			KC_R,	KC_T,			KC_Y,			KC_U,	KC_I,		KC_O,	KC_P,				KC_BSPC},
+  {KC_ESC,	LT(_SYM,KC_A),	KC_S,		LT(_NUM,KC_D),	KC_F,	KC_G,			KC_H,			KC_J,	KC_K,		KC_L,	LT(_SYM,KC_SCOLON),	KC_ENT},
+  {KC_LSFT,	LT(_FN,KC_Z),	KC_X,		KC_C,			KC_V,	KC_B,			KC_N,			KC_M,	KC_COMM,	KC_DOT,	KC_SLSH,			KC_RSFT},
+  {KC_LCTL,	KC_LGUI,		TG(_LOCK),	KC_LALT,		LOWER,	LT(_NAV,KC_SPC),LT(_NAV,KC_SPC),RAISE,	KC_LEFT,	KC_DOWN,KC_UP,				RCTL_T(KC_RIGHT)}
 },
 
 /* Symbols (1)
@@ -81,7 +81,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |   [  |   ]  |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_SYMBOLS] = {
+[_SYM] = {
   {_______, KC_F11,  KC_F12,  KC_LCBR, KC_RCBR, KC_EXLM, KC_PLUS, KC_DQT,  KC_QUOT, KC_GRV,  KC_TILD, KC_DEL},
   {TO(0),   _______, _______, KC_LPRN, KC_RPRN, KC_AMPR, KC_EXLM, KC_EQL,  KC_MINS, KC_GT,   _______, _______},
   {KC_CAPS, _______, _______, KC_LT,   KC_GT,   KC_PIPE, KC_AT,   KC_SLSH, KC_ASTR, KC_BSLS, KC_UNDS, _______},
@@ -117,7 +117,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |             |  0   |  0   |  .   |Enter |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_NUMPAD] = {
+[_NUM] = {
   {_______, _______, _______, _______, _______, _______, KC_NLCK, KC_P7,   KC_P8,   KC_P9,S(KC_PPLS), _______},
   {TO(0),   _______, _______, _______, _______, _______, _______, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, _______},
   {_______, _______, _______, _______, _______, _______, _______, KC_P1,   KC_P2,   KC_P3,   KC_PENT, _______},
@@ -128,18 +128,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | TO(0)| TO(1)|      | TO(3)|      |      |      |      |      |      | TO(1)| TO(6)|
+ * | TO(0)| SYM  |      | NUM  |      |      |      |      |      |      | SYM  | MOUSE|
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | TO(5)| TO(7)|      |      |      |      |      |      |      |      |      |      |
+ * | CONST| FN   |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |    TO(2)    |      |      |      |      |      |
+ * |      |      |      |      |      |    NAV      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 [_LOCK] = {
-  {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
-  {TO(0),   TOR(1),  _______, TOR(3),  _______, _______, _______, _______, _______, _______, TOR(1),  TOR(6) },
-  {TOR(5),  TOR(7),  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
-  {_______, _______, _______, _______, _______, TOR(2),  TOR(2),  _______, _______, _______, _______, _______}
+  {_______,		_______,	_______,	_______,	_______,	_______,	_______,	_______, _______, _______, _______, _______},
+  {TO(0),		TOR(_SYM),	_______,	TOR(_NUM),	_______,	_______,	_______,	_______, _______, _______,TOR(_SYM),TOR(_MOUSE) },
+  {TOR(_CONST),	TOR(_FN),	_______,	_______,	_______,	_______,	_______,	_______, _______, _______, _______, _______},
+  {_______, 	_______,	_______,	_______,	_______,	TOR(_NAV),	TOR(_NAV),	_______, _______, _______, _______, _______}
 },
 
 /* Constants (5)
@@ -154,7 +154,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |      _      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_CONSTANTS] = {
+[_CONST] = {
   {_______, S(KC_Q), S(KC_W), S(KC_E), S(KC_R), S(KC_T), S(KC_Y), S(KC_U), S(KC_I), S(KC_O), S(KC_P), _______},
   {TO(0),   S(KC_A), S(KC_S), S(KC_D), S(KC_F), S(KC_G), S(KC_H), S(KC_J), S(KC_K), S(KC_L), _______, _______},
   {_______, S(KC_Z), S(KC_X), S(KC_C), S(KC_V), S(KC_B), S(KC_N), S(KC_M), _______, _______, _______, _______},
@@ -191,7 +191,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-[_FUNKEYS] = {
+[_FN] = {
   {_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  _______},
   {TO(0),   KC_F11,  KC_F12,  _______, _______, _______, _______, _______, _______, _______, _______, _______},
   {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______},
